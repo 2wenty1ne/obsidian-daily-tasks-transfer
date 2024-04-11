@@ -1,11 +1,11 @@
 {
-	"id": "sample-plugin",
-	"name": "Sample Plugin",
+	"id": "obsidian-daily-tasks-transfer",
+	"name": "Daily Transfer Plugin",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"description": "Plugin to transfer uncompleted tasks to new daily task.",
+	"author": "2wenty1ne",
+	"authorUrl": "https://github.com/2wenty1ne",
+	"fundingUrl": "https://github.com/2wenty1ne",
 	"isDesktopOnly": false
 }
