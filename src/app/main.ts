@@ -1,8 +1,8 @@
 import { Plugin } from 'obsidian'
 
-import { reloadRibbonButton } from 'src/reloadButton/reloadRibbon';
+import { addReloadRibbonButton } from 'src/reloadButton/reloadRibbon';
 
-import { quickAccessDailyRibbonButton } from 'src/Daily/dailyButton';
+import { addQuickAccessDailyRibbonButton } from 'src/Daily/dailyButton';
 import { DailyTransferSettingTab } from 'src/settings/dailySettingsTab';
 
 import { sortDate } from 'src/Daily/dateSorter';
@@ -23,14 +23,15 @@ export default class DailyTransferPlugin extends Plugin {
 	async onload(): Promise<void> {
 		await this.loadSettings();
 		console.log('Loading DailyTransferPlugin');
+		
 
 		// 
-		sortDate();
+		// sortDate();
 		// 
 
 		this.addSettingTab(new DailyTransferSettingTab(this.app, this));
-		reloadRibbonButton(this);
-		quickAccessDailyRibbonButton(this)
+		addReloadRibbonButton(this);
+		addQuickAccessDailyRibbonButton(this)
 	}
 
 	unload(): void {
