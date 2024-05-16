@@ -1,5 +1,5 @@
-import { Menu, Notice, TAbstractFile, TFolder } from "obsidian";
-import { getDailyFiles } from "./manageDailyFiles";
+import { Menu, Notice, TAbstractFile, TFile, TFolder } from "obsidian";
+import { getDailyFiles, getTodaysDailyFile } from "./manageDailyFiles";
 
 export function addQuickAccessDailyRibbonButton(that: any): void{
     const vault = this.app.vault;
@@ -15,24 +15,29 @@ export function addQuickAccessDailyRibbonButton(that: any): void{
                     new Notice("Transfering...");
                     
                     const fileRoot: TFolder = vault.getRoot();
-                    const filepath: String = fileRoot.path;
-                    // const completeFilePath: String = filepath + "Main"
+                    
+                    let todaysDailyFile: TFile | null = getTodaysDailyFile(vault);
 
-                    // const completeFilePath: String = "/" + "Main"
-                    // console.log(`Main file path: ${completeFilePath}`);
-                    // const mainFolder = this.app.vault.getFolderByPath(completeFilePath);
-                    // console.log(`Type: ${typeof(mainFolder)}, ${mainFolder}`);
+                    if (!todaysDailyFile){
+                        new Notice("Error retrieving todays daily note");
+                        return;
+                    }
+                    new Notice("Got todays daily note");
+
+                    let todayDailyNoteContent: string = vault.read(todaysDailyFile);
+
+                    console.log(todayDailyNoteContent);
 
                     //? Funktioniert für eine Ebene childs
                     // const rootChildren: TAbstractFile[] = fileRoot.children;
                     //console.log(`Amount childs: ${rootChildren.length}`);
 
-                    static vault.recurseChildren(fileRoot, (file: TAbstractFile) => {
-                        console.log(`Type: ${typeof(file)}, ${file}`);
-                    });
+                    //static vault.recurseChildren(fileRoot, (file: TAbstractFile) => {
+                    //    console.log(`Type: ${typeof(file)}, ${file}`)
+                    //})
 
                     // console.log(filepath)
-                    getDailyFiles(filepath)
+                    // getDailyFiles(filepath)
                 })
         );
 
