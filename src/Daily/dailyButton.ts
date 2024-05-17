@@ -1,5 +1,5 @@
-import { Menu, Notice, TAbstractFile, TFile, TFolder } from "obsidian";
-import { getDailyFiles, getTodaysDailyFile } from "./manageDailyFiles";
+import { Menu, Notice } from "obsidian";
+import { transferDailyContent } from "./dailyTransferDaily";
 
 export function addQuickAccessDailyRibbonButton(that: any): void{
     const vault = this.app.vault;
@@ -13,20 +13,11 @@ export function addQuickAccessDailyRibbonButton(that: any): void{
                 .setIcon("file-input")
                 .onClick(() => {
                     new Notice("Transfering...");
-                    
-                    const fileRoot: TFolder = vault.getRoot();
-                    
-                    let todaysDailyFile: TFile | null = getTodaysDailyFile(vault);
 
-                    if (!todaysDailyFile){
-                        new Notice("Error retrieving todays daily note");
-                        return;
-                    }
-                    new Notice("Got todays daily note");
+                    transferDailyContent(this.app.vault);
+                    // let todayDailyNoteContent: string = vault.read(todaysDailyFile);
 
-                    let todayDailyNoteContent: string = vault.read(todaysDailyFile);
-
-                    console.log(todayDailyNoteContent);
+                    // console.log(todayDailyNoteContent);
 
                     //? Funktioniert für eine Ebene childs
                     // const rootChildren: TAbstractFile[] = fileRoot.children;
@@ -51,7 +42,7 @@ export function addQuickAccessDailyRibbonButton(that: any): void{
                     new Notice("tomorrow");
                 })
         );
-        menu.addSeparator();
+        // menu.addSeparator();
 
         menu.addItem((item) =>
             item
