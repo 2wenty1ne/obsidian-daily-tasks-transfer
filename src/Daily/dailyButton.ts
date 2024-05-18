@@ -7,6 +7,7 @@ export function addQuickAccessDailyRibbonButton(that: any): void{
     const quickAccessButton = that.addRibbonIcon('calendar-range', 'Dailies', (evt: MouseEvent) => {
         const menu = new Menu();
 
+        //? Adding button to transfer last daily note to todays daily note
         menu.addItem((item) =>
             item
                 .setTitle("Transfer to daily note!")
@@ -15,25 +16,12 @@ export function addQuickAccessDailyRibbonButton(that: any): void{
                     new Notice("Transfering...");
 
                     transferDailyContent(this.app.vault);
-                    // let todayDailyNoteContent: string = vault.read(todaysDailyFile);
-
-                    // console.log(todayDailyNoteContent);
-
-                    //? Funktioniert für eine Ebene childs
-                    // const rootChildren: TAbstractFile[] = fileRoot.children;
-                    //console.log(`Amount childs: ${rootChildren.length}`);
-
-                    //static vault.recurseChildren(fileRoot, (file: TAbstractFile) => {
-                    //    console.log(`Type: ${typeof(file)}, ${file}`)
-                    //})
-
-                    // console.log(filepath)
-                    // getDailyFiles(filepath)
                 })
         );
 
         menu.addSeparator();
 
+        //? Add button to open tomorrows daily note
         menu.addItem((item) =>
             item
                 .setTitle("Tomorrow")
@@ -42,8 +30,8 @@ export function addQuickAccessDailyRibbonButton(that: any): void{
                     new Notice("tomorrow");
                 })
         );
-        // menu.addSeparator();
 
+        //? Add button to open last daily note
         menu.addItem((item) =>
             item
                 .setTitle("Previous")

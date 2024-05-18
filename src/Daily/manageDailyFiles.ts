@@ -1,6 +1,7 @@
 import { TAbstractFile, TFile, TFolder, Vault } from "obsidian";
 
 
+//? Returns an array containing all daily files in the daily folder as TAbstractFile object
 export function getDailyFiles(vault: Vault, dailyFolderPath: string): TAbstractFile[] | null{
     //! Uses daily folder path
 
@@ -16,6 +17,39 @@ export function getDailyFiles(vault: Vault, dailyFolderPath: string): TAbstractF
 }
 
 
+export async function getDailyTemplateContent(vault: Vault, dailyTemplateFilePath: string): Promise<string | null>{
+    let dailyTemplateFile: TFile | null = vault.getFileByPath(dailyTemplateFilePath);
+
+    if (!dailyTemplateFile){
+        console.error(`Error finding daily template file at ${dailyTemplateFilePath}`);
+        return Promise.resolve(null);
+    }
+    
+    try {
+        let dailyTemplateContent: string = await vault.read(dailyTemplateFile);
+        return dailyTemplateContent;
+
+    } catch (error) {
+        console.error(`Error reading daily file template: ${error}`);
+        return null;
+    }
+
+}
+
+
+//? Create todays daily note from template
+export function createTodaysDailyNote(vault: Vault, dailyFolderPath: string, dailyTemplateContent: string): number {
+    let todayDateString = dateToString(new Date());
+    let todayDailyNoteFilePath = `${dailyFolderPath}/${todayDateString}.md`
+
+    console.log(`Creating daily note: ${todayDailyNoteFilePath}`);
+    vault.create(todayDailyNoteFilePath, dailyTemplateContent);
+    return 1;
+}
+
+
+//? Returns todays daily file as TFile object
+//? Returns null if todays file is not a TFile object
 export function getTodaysDailyFile(vault: Vault, dailyFolderPath: string): TFile | null{
     //! Uses daily folder path
 
@@ -36,7 +70,11 @@ export function getTodaysDailyFile(vault: Vault, dailyFolderPath: string): TFile
 
     return null;
 }
-export function getPreviousDailyFileSort(vault: Vault, dailyNotes: TAbstractFile[], dailyFolderPath: string): any{
+
+
+//? Returns the last created daily file as TFile object
+//? Returns null if there was an error getting the file using the created path
+export function getPreviousDailyFile(vault: Vault, dailyNotes: TAbstractFile[], dailyFolderPath: string): TFile | null{
     const todayDate: Date = new Date();
 
     let dailyNotesDates: Date[] = dailyNotes
@@ -45,10 +83,6 @@ export function getPreviousDailyFileSort(vault: Vault, dailyNotes: TAbstractFile
         .sort((a, b) => (a as Date).getTime() - (b as Date).getTime())  //? Sort all remaining elements by time
         .reverse();                                                     //? Reverse the list to have the newest elment on top
 
-    //! TEST
-    // for(let testdate of dailyNotesDates){
-    //     console.log(`${(testdate as Date).toLocaleDateString('de-DE')}`);
-    // }
             
     let previousFileString: string = dateToString(dailyNotesDates[0]);
 
@@ -67,6 +101,8 @@ export function getPreviousDailyFileSort(vault: Vault, dailyNotes: TAbstractFile
 }
 
 
+//? No usage, using the sorting version
+//? Its still here to maybe perform time meassures
 export function getPreviousDailyFileComp(vault: Vault, dailyNotes: TAbstractFile[]): TAbstractFile | null{
     //? Returns the last daily file besides todays daily file
 
@@ -95,6 +131,8 @@ export function getPreviousDailyFileComp(vault: Vault, dailyNotes: TAbstractFile
 }
 
 
+//? Converts a string in the right format into a Date object
+//? The string has to be in a specific format
 function stringToDate(string: string): Date | null{
     //! Used date pattern
     const datePattern = /^(\d{2})-(\d{2})-(\d{4})\.md$/;
@@ -112,6 +150,8 @@ function stringToDate(string: string): Date | null{
 }
 
 
+//? Converts a Date object into a string
+//? The string will be in a specific format
 function dateToString(date: Date): string{
     //! Used date pattern
     const dd = String(date.getDate()).padStart(2, '0');

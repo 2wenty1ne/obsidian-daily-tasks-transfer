@@ -1,11 +1,26 @@
 import { Notice, TAbstractFile, TFile, Vault } from "obsidian";
-import { getDailyFiles, getTodaysDailyFile, getPreviousDailyFileComp, getPreviousDailyFileSort } from "./manageDailyFiles";
+import { getDailyFiles, getTodaysDailyFile, getPreviousDailyFile, getDailyTemplateContent, createTodaysDailyNote } from "./manageDailyFiles";
 
 
-const dailyFolderPath: string = "Main/Daily";
+//TODO Get values from settings
+const dailyFolderPath: string = "Main/Daily";                                       //? Globally used path to daily folder 
+const dailyTemplateFilePath: string = "Main/Archive/Templates/Dailes-Template.md"   //? Globally used daily template 
 
 
-export function transferDailyContent(vault: Vault){
+export async function transferDailyContent(vault: Vault){
+    //? Get daily template content
+    let dailyTemplateContent: string | null = await getDailyTemplateContent(vault, dailyTemplateFilePath);
+
+    if (!dailyTemplateContent){
+        new Notice("Error retrieving daily note template");
+        return;
+    }
+    new Notice("Got daily template!") //! TEST
+
+    //! TEST, later only if there is no daily file
+    createTodaysDailyNote(vault, dailyFolderPath, dailyTemplateContent);
+
+
     //? Get todays daily note
     let todaysDailyFile: TFile | null = getTodaysDailyFile(vault, dailyFolderPath);
 
@@ -16,7 +31,6 @@ export function transferDailyContent(vault: Vault){
     new Notice("Got todays daily note"); //! TEST
 
 
-    //TODO get last daily note
     //? Get previous daily note
     let dailyNotes: TAbstractFile[] | null = getDailyFiles(vault, dailyFolderPath);
 
@@ -27,14 +41,11 @@ export function transferDailyContent(vault: Vault){
     new Notice("Got daily folder"); //! TEST
 
 
-    let previousDailyFile: TAbstractFile | null = getPreviousDailyFileComp(vault, dailyNotes);
+    let previousDailyFile: TAbstractFile | null = getPreviousDailyFile(vault, dailyNotes, dailyFolderPath);
     if (!previousDailyFile){
         new Notice("Error retrieving previous daily note");
         return;
     }
 
     new Notice("Got previous daily note"); //! TEST
-    console.log(`Comp: Previous daily note: ${previousDailyFile.name}`)
-
-    console.log(`Sort: Previous daily note: ${getPreviousDailyFileSort(vault, dailyNotes, dailyFolderPath).name}`);
 }
