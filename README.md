@@ -1,14 +1,12 @@
 # Obsidian Daily Tasks transfer Plugin
 
-This is a sample plugin for Obsidian (https://obsidian.md).
-
 This is a Plugin for a very specific Use Case and a specific format.
-It allows you transfer tasks you created in your previous [Obsidian](https://obsidian.md) daily note to todays daily note on a button click.
+It allows you to transfer tasks you created in your previous [Obsidian](https://obsidian.md) daily note to today's daily note with a button click.
 
 ## Features
-Adds a Ribbon buttons with the following features
-- Transfer: Transfer all undone Tasks from your previous daily note into todays daily note (creates daily note, if necessary)
-- Tomorrow: Opens (and creates if necessary) tomorrows daily note
+Adds a Ribbon button with the following features
+- Transfer: Transfer all undone Tasks from your previous daily note into today's daily note (create daily note, if necessary)
+- Tomorrow: Opens (and creates if necessary) tomorrow's daily note
 - Previous: Opens the previous daily note
 
 ## Format
