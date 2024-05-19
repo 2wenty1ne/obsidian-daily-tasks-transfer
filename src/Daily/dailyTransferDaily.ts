@@ -1,5 +1,6 @@
 import { Notice, TAbstractFile, TFile, Vault } from "obsidian";
-import { getDailyFiles, getTodaysDailyFile, getPreviousDailyFile, getDailyTemplateContent, createTodaysDailyNote } from "./manageDailyFiles";
+import { getDailyFiles, getTodaysDailyFile, getPreviousDailyFile, createTodaysDailyNote, extractTasksFromPreviousDaily } from "./manageDailyFiles";
+import { readNote } from "./dailyTransferUtils";
 
 
 //TODO Get values from settings
@@ -9,13 +10,13 @@ const dailyTemplateFilePath: string = "Main/Archive/Templates/Dailes-Template.md
 
 export async function transferDailyContent(vault: Vault){
     //? Get daily template content
-    let dailyTemplateContent: string | null = await getDailyTemplateContent(vault, dailyTemplateFilePath);
+    let dailyTemplateContent: string | null = await readNote(vault, dailyTemplateFilePath);
 
     if (!dailyTemplateContent){
         new Notice("Error retrieving daily note template");
         return;
     }
-    new Notice("Got daily template!") //! TEST
+
 
     //! TEST, later only if there is no daily file
     createTodaysDailyNote(vault, dailyFolderPath, dailyTemplateContent);
@@ -28,7 +29,6 @@ export async function transferDailyContent(vault: Vault){
         new Notice("Error retrieving todays daily note");
         return;
     }
-    new Notice("Got todays daily note"); //! TEST
 
 
     //? Get previous daily note
@@ -38,14 +38,35 @@ export async function transferDailyContent(vault: Vault){
         new Notice("Error retrieving daily note folder");
         return;
     }
-    new Notice("Got daily folder"); //! TEST
 
 
-    let previousDailyFile: TAbstractFile | null = getPreviousDailyFile(vault, dailyNotes, dailyFolderPath);
+    let previousDailyFile: TFile | null = getPreviousDailyFile(vault, dailyNotes, dailyFolderPath);
     if (!previousDailyFile){
         new Notice("Error retrieving previous daily note");
         return;
     }
 
-    new Notice("Got previous daily note"); //! TEST
+
+    let previousDailyContent: string | null = await readNote(vault, undefined, previousDailyFile);
+    if(!previousDailyContent){
+        new Notice("Error reading previous daily note");
+        return;
+    }
+
+    // console.log(previousDailyContent); //! TEST
+
+    //! TEST
+    //? Daily test note to develop task extraction
+    let testDailyNotePath: string = "Notes/Obsidian daily test.md"
+    let testDailyNoteContent: string | null = await readNote(vault, testDailyNotePath);
+    
+    if (!testDailyNoteContent){
+        new Notice("Error reading test daily note");
+        return;
+    }
+
+    extractTasksFromPreviousDaily(testDailyNoteContent)
+
+    // extractTasksFromPreviousDaily(vault, previousDailyContent)
+
 }

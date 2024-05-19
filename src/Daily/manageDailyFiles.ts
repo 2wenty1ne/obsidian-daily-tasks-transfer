@@ -1,4 +1,5 @@
 import { TAbstractFile, TFile, TFolder, Vault } from "obsidian";
+import { NoteContent, dateToString, stringToDate } from "./dailyTransferUtils";
 
 
 //? Returns an array containing all daily files in the daily folder as TAbstractFile object
@@ -14,26 +15,6 @@ export function getDailyFiles(vault: Vault, dailyFolderPath: string): TAbstractF
     let dailyNotes: TAbstractFile[] = dailyFolder.children;
 
     return dailyNotes;
-}
-
-
-export async function getDailyTemplateContent(vault: Vault, dailyTemplateFilePath: string): Promise<string | null>{
-    let dailyTemplateFile: TFile | null = vault.getFileByPath(dailyTemplateFilePath);
-
-    if (!dailyTemplateFile){
-        console.error(`Error finding daily template file at ${dailyTemplateFilePath}`);
-        return Promise.resolve(null);
-    }
-    
-    try {
-        let dailyTemplateContent: string = await vault.read(dailyTemplateFile);
-        return dailyTemplateContent;
-
-    } catch (error) {
-        console.error(`Error reading daily file template: ${error}`);
-        return null;
-    }
-
 }
 
 
@@ -53,12 +34,6 @@ export function createTodaysDailyNote(vault: Vault, dailyFolderPath: string, dai
 export function getTodaysDailyFile(vault: Vault, dailyFolderPath: string): TFile | null{
     //! Uses daily folder path
 
-    //? Path von "const files = this.app.vault.getMarkdownFiles()":
-    //? Main/Daily/26-03-2024.md
-
-    //? Path to daily folder:
-    //? Main/Daily/
-
     let todaysDateString: string = dateToString(new Date());
     let todayDateFilePathString: string = `${dailyFolderPath}/${todaysDateString}.md`
 
@@ -69,6 +44,60 @@ export function getTodaysDailyFile(vault: Vault, dailyFolderPath: string): TFile
     }
 
     return null;
+}
+
+
+//? Extracs every task and its corresponding header from the previous daily note
+export function extractTasksFromPreviousDaily(previousDailyContent: string): NoteContent{
+
+    const lines = previousDailyContent.split('\n');
+    let properties = '';
+    let inProperties = false;
+    let gotProperties = false;
+
+    let currentHeader: string = "topText";
+    let headers: { [key: string]: string[]} = {"topText": []};
+
+
+    let line: string;
+    for (line of lines){
+
+        //? Extract properties from properties
+        if (!gotProperties) {
+            if (line.startsWith('---')) {
+                if (!inProperties) {
+                    //? Start of properties
+                    inProperties = true;
+                }
+                else {
+                    //? End of properties
+                    gotProperties = true;
+                    inProperties = false;
+                }
+            }
+            properties += line + '\n';
+            continue;
+        }
+
+        //? Detect new header
+        if (line.startsWith('##')) {
+            currentHeader = line.replace('##', '').trim();
+            
+            if (!headers[currentHeader]){
+                headers[currentHeader] = [];
+            }
+        }
+        else {
+            //? Skip done tasks
+            if (line.startsWith("- [x]")){
+                continue;
+            }
+            //? Add task to current header
+            headers[currentHeader].push(line + '\n');
+        }
+    }
+
+    return {properties, headers};
 }
 
 
@@ -128,37 +157,4 @@ export function getPreviousDailyFileComp(vault: Vault, dailyNotes: TAbstractFile
     }
 
     return previousFile;
-}
-
-
-//? Converts a string in the right format into a Date object
-//? The string has to be in a specific format
-function stringToDate(string: string): Date | null{
-    //! Used date pattern
-    const datePattern = /^(\d{2})-(\d{2})-(\d{4})\.md$/;
-    const match = string.match(datePattern);
-
-    if (match) {
-        const day = parseInt(match[1], 10);
-        const month = parseInt(match[2], 10) - 1;
-        const year = parseInt(match[3], 10);
-
-        return new Date(year, month, day);
-    }
-
-    return null;
-}
-
-
-//? Converts a Date object into a string
-//? The string will be in a specific format
-function dateToString(date: Date): string{
-    //! Used date pattern
-    const dd = String(date.getDate()).padStart(2, '0');
-    const mm = String(date.getMonth() + 1).padStart(2, '0');
-    const yyyy = date.getFullYear();
-
-    const currentDate = `${dd}-${mm}-${yyyy}`;
-
-    return currentDate;
 }
