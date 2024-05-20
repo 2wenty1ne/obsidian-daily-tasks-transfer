@@ -2,8 +2,8 @@ import { TAbstractFile, TFile, TFolder, Vault } from "obsidian";
 import { NoteContent, dateToString, stringToDate } from "./dailyTransferUtils";
 
 
-//? Returns an array containing all daily files in the daily folder as TAbstractFile object
-export function getDailyFiles(vault: Vault, dailyFolderPath: string): TAbstractFile[] | null{
+//? Returns an array containing all daily files in the daily folder as TFile objects
+export function getDailyFiles(vault: Vault, dailyFolderPath: string): TFile[] | null{
     //! Uses daily folder path
 
     let dailyFolder: TFolder | null = vault.getFolderByPath(dailyFolderPath);
@@ -12,20 +12,41 @@ export function getDailyFiles(vault: Vault, dailyFolderPath: string): TAbstractF
         return null;
     }
 
-    let dailyNotes: TAbstractFile[] = dailyFolder.children;
+    let dailyNotesAbst: TAbstractFile[] = dailyFolder.children;
+    let dailyNotes: TFile[] = dailyNotesAbst.filter(element => element instanceof TFile)
 
     return dailyNotes;
 }
 
 
+//? Returns true, if daily file already exists
+//? Returns false, if not
+export function checkTodaysNote(dailyNotes: TFile[]): boolean{
+    let today = dateToString(new Date());
+
+    for (const file of dailyNotes) {
+        if (file.basename == today){
+            return true;
+        }
+    }
+    return false;
+}
+
+
 //? Create todays daily note from template
-export function createTodaysDailyNote(vault: Vault, dailyFolderPath: string, dailyTemplateContent: string): number {
+export async function createTodaysDailyNote(vault: Vault, dailyFolderPath: string, dailyTemplateContent: string): Promise<TFile | null> {
     let todayDateString = dateToString(new Date());
     let todayDailyNoteFilePath = `${dailyFolderPath}/${todayDateString}.md`
 
-    console.log(`Creating daily note: ${todayDailyNoteFilePath}`);
-    vault.create(todayDailyNoteFilePath, dailyTemplateContent);
-    return 1;
+    //? Create file
+    try{
+        let createdFile: TFile = await vault.create(todayDailyNoteFilePath, dailyTemplateContent);
+        return createdFile;
+    }
+    catch (error){
+        console.error(`Error creating daily file, path: ${todayDailyNoteFilePath}`);
+        return Promise.resolve(null);
+    }
 }
 
 
@@ -97,6 +118,13 @@ export function extractTasksFromPreviousDaily(previousDailyContent: string): Not
         }
     }
 
+    console.log(`Properties: ${properties}`);
+
+    for (const [key, value] of Object.entries(headers)){
+        console.log(`${key}: ${value}`);
+    }
+
+
     return {properties, headers};
 }
 
@@ -127,6 +155,11 @@ export function getPreviousDailyFile(vault: Vault, dailyNotes: TAbstractFile[], 
     }
 
     return previousFile;
+}
+
+
+export function addPreviousContentToDaily(dailyContent: string){
+
 }
 
 
