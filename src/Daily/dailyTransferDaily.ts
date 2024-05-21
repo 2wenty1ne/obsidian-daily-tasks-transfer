@@ -1,5 +1,5 @@
 import { Notice, TAbstractFile, TFile, Vault } from "obsidian";
-import { getDailyFiles, getTodaysDailyFile, getPreviousDailyFile, createTodaysDailyNote, extractTasksFromPreviousDaily, checkTodaysNote } from "./manageDailyFiles";
+import { getDailyFiles, getTodaysDailyFile, getPreviousDailyFile, createTodaysDailyNote, extractTasksFromPreviousDaily, checkTodaysNote, addPreviousContentToDaily } from "./manageDailyFiles";
 import { NoteContent, readNote } from "./dailyTransferUtils";
 
 
@@ -70,24 +70,20 @@ export async function transferDailyContent(vault: Vault){
         return;
     }
 
+    //? --Add previous note content to daily note--
+
+    let previousTasks: NoteContent = extractTasksFromPreviousDaily(previousDailyContent);
+
     let currentDailyNoteContent: string | null = await readNote(vault, undefined, todaysDailyFile);
 
-
-
-
-    //! TEST
-    //? --Daily test note to develop task extraction--
-    let testDailyNotePath: string = "Notes/Obsidian daily test.md"
-    let testDailyNoteContent: string | null = await readNote(vault, testDailyNotePath);
-    
-    if (!testDailyNoteContent){
-        new Notice("Error reading test daily note");
+    if (!currentDailyNoteContent){
+        new Notice("Error reading todays daily note"); //TODO überarbeiten
         return;
     }
 
-    let previousTasks: NoteContent = extractTasksFromPreviousDaily(previousDailyContent);
-    
+    let newDailyContent: string = addPreviousContentToDaily(currentDailyNoteContent, previousTasks);
 
-    // extractTasksFromPreviousDaily(vault, previousDailyContent)
+    await vault.modify(todaysDailyFile, newDailyContent);
 
+    new Notice("Transfered!");
 }

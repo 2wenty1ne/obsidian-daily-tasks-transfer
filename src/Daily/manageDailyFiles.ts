@@ -72,7 +72,6 @@ export function getTodaysDailyFile(vault: Vault, dailyFolderPath: string): TFile
 export function extractTasksFromPreviousDaily(previousDailyContent: string): NoteContent{
 
     const lines = previousDailyContent.split('\n');
-    let properties = '';
     let inProperties = false;
     let gotProperties = false;
 
@@ -96,13 +95,12 @@ export function extractTasksFromPreviousDaily(previousDailyContent: string): Not
                     inProperties = false;
                 }
             }
-            properties += line + '\n';
             continue;
         }
 
         //? Detect new header
-        if (line.startsWith('##')) {
-            currentHeader = line.replace('##', '').trim();
+        if (line.startsWith('#')) {
+            currentHeader = line.replace('#', '').trim();
             
             if (!headers[currentHeader]){
                 headers[currentHeader] = [];
@@ -118,14 +116,7 @@ export function extractTasksFromPreviousDaily(previousDailyContent: string): Not
         }
     }
 
-    console.log(`Properties: ${properties}`);
-
-    for (const [key, value] of Object.entries(headers)){
-        console.log(`${key}: ${value}`);
-    }
-
-
-    return {properties, headers};
+    return {headers};
 }
 
 
@@ -158,8 +149,61 @@ export function getPreviousDailyFile(vault: Vault, dailyNotes: TAbstractFile[], 
 }
 
 
-export function addPreviousContentToDaily(dailyContent: string){
+export function addPreviousContentToDaily(dailyContent: string, previousContent: NoteContent): string{
+    let allPreviousHeaders: string[] = Object.keys(previousContent.headers);
+    
+    const lines = dailyContent.split('\n');
 
+    let inProperties = false;
+    let gotProperties = false;
+    let currentHeader: string = "topText";
+
+    let newDailyText: string = '\n';
+
+    for (let i = 0; i < lines.length; i++){
+        let line: string = lines[i];
+
+        //? Skip properties
+        if (!gotProperties) {
+            if (line.startsWith('---')) {
+                if (!inProperties) {
+                    //? Start of properties
+                    inProperties = true;
+                }
+                else {
+                    //? End of properties
+                    gotProperties = true;
+                    inProperties = false;
+                }
+            }
+            continue;
+        }
+
+        if (line.startsWith('#')) {
+            let previousHeaderContentArr: string[] = previousContent.headers[currentHeader];
+            let previousHeaderContent = previousHeaderContentArr.join('');
+
+            newDailyText = newDailyText.concat(previousHeaderContent)
+
+            let nextHeader: string = line.replace('#', '').trim();
+
+            if (allPreviousHeaders.includes(nextHeader)){
+                currentHeader = nextHeader;
+            }
+        }
+        
+        let concatString: string;
+        if (line == ""){
+            concatString = line;
+        }
+        else {
+            concatString = line + "\n"
+        }
+
+        newDailyText = newDailyText.concat(concatString);
+    }
+
+    return newDailyText;
 }
 
 
