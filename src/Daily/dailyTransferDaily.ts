@@ -83,7 +83,8 @@ export async function transferDailyContent(vault: Vault){
 
     let newDailyContent: string = addPreviousContentToDaily(currentDailyNoteContent, previousTasks);
 
-    await vault.modify(todaysDailyFile, newDailyContent);
+
+    let awaiting = await vault.modify(todaysDailyFile, newDailyContent);
 
     new Notice("Transfered!");
 }

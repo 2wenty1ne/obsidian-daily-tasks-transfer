@@ -3,6 +3,7 @@ import { TFile, Vault } from "obsidian";
 
 //? Format in which the content of a file is saved
 export interface NoteContent {
+    properties: string;
     headers: {
         [key: string]: string[]
     }

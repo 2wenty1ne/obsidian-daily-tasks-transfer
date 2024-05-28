@@ -13,7 +13,15 @@ export function getDailyFiles(vault: Vault, dailyFolderPath: string): TFile[] | 
     }
 
     let dailyNotesAbst: TAbstractFile[] = dailyFolder.children;
-    let dailyNotes: TFile[] = dailyNotesAbst.filter(element => element instanceof TFile)
+    let dailyNotes: TFile[] = [];
+    // let dailyNotesAbst: TFile[] = dailyFolder.children.filter(element => element instanceof TFile);
+    // let dailyNotes: TFile[] = dailyNotesAbst.filter(element => element instanceof TFile);
+
+    for (const file of dailyNotesAbst){
+        if (file instanceof TFile){
+            dailyNotes.push(file);
+        }
+    }
 
     return dailyNotes;
 }
@@ -72,6 +80,8 @@ export function getTodaysDailyFile(vault: Vault, dailyFolderPath: string): TFile
 export function extractTasksFromPreviousDaily(previousDailyContent: string): NoteContent{
 
     const lines = previousDailyContent.split('\n');
+    
+    let properties = '';
     let inProperties = false;
     let gotProperties = false;
 
@@ -95,6 +105,7 @@ export function extractTasksFromPreviousDaily(previousDailyContent: string): Not
                     inProperties = false;
                 }
             }
+            properties += line + '\n';
             continue;
         }
 
@@ -114,9 +125,9 @@ export function extractTasksFromPreviousDaily(previousDailyContent: string): Not
             //? Add task to current header
             headers[currentHeader].push(line + '\n');
         }
-    }
+    }                             
 
-    return {headers};
+    return {properties, headers};
 }
 
 
@@ -158,7 +169,8 @@ export function addPreviousContentToDaily(dailyContent: string, previousContent:
     let gotProperties = false;
     let currentHeader: string = "topText";
 
-    let newDailyText: string = '\n';
+    //? Add properties
+    let newDailyText: string = `${previousContent.properties}`;
 
     for (let i = 0; i < lines.length; i++){
         let line: string = lines[i];
