@@ -5,7 +5,6 @@ import { addReloadRibbonButton } from 'src/reloadButton/reloadRibbon';
 import { addQuickAccessDailyRibbonButton } from 'src/Daily/dailyButton';
 import { DailyTransferSettingTab } from 'src/settings/dailySettingsTab';
 
-import { sortDate } from 'src/Daily/dateSorter';
 
 
 interface DailyTransferPluginSettings {
@@ -24,10 +23,6 @@ export default class DailyTransferPlugin extends Plugin {
 		await this.loadSettings();
 		console.log('Loading DailyTransferPlugin');
 		
-
-		// 
-		// sortDate();
-		// 
 
 		this.addSettingTab(new DailyTransferSettingTab(this.app, this));
 		addReloadRibbonButton(this);

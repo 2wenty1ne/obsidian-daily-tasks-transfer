@@ -1,16 +1,13 @@
 import { Notice, TAbstractFile, TFile, Vault } from "obsidian";
 import { getDailyFiles, getTodaysDailyFile, getPreviousDailyFile, createTodaysDailyNote, extractTasksFromPreviousDaily, checkTodaysNote, addPreviousContentToDaily } from "./manageDailyFiles";
 import { NoteContent, readNote } from "./dailyTransferUtils";
-
-
-//TODO Get values from settings
-const dailyFolderPath: string = "Main/Daily";                                       //? Globally used path to daily folder 
-const dailyTemplateFilePath: string = "Main/Archive/Templates/Dailes-Template.md"   //? Globally used daily template 
+import { dailyFolderPath, dailyTemplateFilePath } from "./dailyGlobalFilePathStorage";
 
 
 export async function transferDailyContent(vault: Vault){
 
     //? --Get previous daily note--
+    
     //? Get all daily notes
     let dailyNotes: TFile[] | null = getDailyFiles(vault, dailyFolderPath);
 
@@ -77,7 +74,7 @@ export async function transferDailyContent(vault: Vault){
     let currentDailyNoteContent: string | null = await readNote(vault, undefined, todaysDailyFile);
 
     if (!currentDailyNoteContent){
-        new Notice("Error reading todays daily note"); //TODO überarbeiten
+        new Notice("Error getting todays daily note content");
         return;
     }
 
