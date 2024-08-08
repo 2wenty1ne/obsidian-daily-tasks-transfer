@@ -1,7 +1,8 @@
 import { Notice, TAbstractFile, TFile, TFolder, Vault } from "obsidian";
-import { addPreviousContentToDaily, extractTasksFromPreviousDaily, getDailyFiles, getPreviousDailyFile } from "./manageDailyFiles";
-import { dateToString, NoteContent, readNote } from "./dailyTransferUtils";
-import { dailyFolderPath, dailyTemplateFilePath } from "./dailyGlobalFilePathStorage";
+import { addPreviousContentToDaily, getDailyFiles, getPreviousDailyFile } from "src/Daily/manageDailyFiles";
+import { dateToString, NoteContent, readNote } from "src/Daily/dailyTransferUtils";
+import { dailyFolderPath, dailyTemplateFilePath } from "src/Daily/dailyGlobalFilePathStorage";
+import { extractTasksFromPreviousDaily } from "src/Daily/dailyStringToNoteContent";
 
 
 //? Folder to a daily test note

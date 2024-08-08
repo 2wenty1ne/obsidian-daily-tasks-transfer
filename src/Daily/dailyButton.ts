@@ -1,7 +1,9 @@
 import { Menu, Notice } from "obsidian";
 import { transferDailyContent } from "./dailyTransferDaily";
-import { transferDailyTestContent } from "./dailyTestTransfer";
 import { getPreviousDaily } from "./dailyGetPrevious";
+import { transferDailyTestContent } from "tests/test-functions/dailyTestTransfer";
+import { getNoteContent } from "tests/test-functions/testsGetNoteContent";
+
 
 export function addQuickAccessDailyRibbonButton(that: any): void{
     const vault = this.app.vault;
@@ -9,16 +11,29 @@ export function addQuickAccessDailyRibbonButton(that: any): void{
     const quickAccessButton = that.addRibbonIcon('calendar-range', 'Dailies', (evt: MouseEvent) => {
         const menu = new Menu();
 
-        // menu.addItem((item) => 
-        //     item
-        //         .setTitle("Test transfer")
-        //         .setIcon("flask-conical")
-        //         .onClick(() => {
-        //             new Notice("Test transfer")
+        menu.addItem((item) => 
+            item
+                .setTitle("Test transfer")
+                .setIcon("flask-conical")
+                .onClick(() => {
+                    new Notice("Test transfer")
 
-        //             transferDailyTestContent(vault)
-        //         })
-        // )
+                    transferDailyTestContent(vault)
+                })
+        )
+
+        menu.addItem((item) => 
+        item
+            .setTitle("Note to NoteContent")
+            .setIcon("panel-top-open")
+            .onClick(() => {
+                new Notice("Saving NoteContent")
+
+                getNoteContent(this.app)
+            })
+    )
+
+        menu.addSeparator();
 
         //? Adding button to transfer last daily note to todays daily note
         menu.addItem((item) =>

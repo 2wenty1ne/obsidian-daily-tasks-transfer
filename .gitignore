@@ -1,3 +1,6 @@
+.env
+test-files-paths.ts
+
 # vscode
 .vscode 
 

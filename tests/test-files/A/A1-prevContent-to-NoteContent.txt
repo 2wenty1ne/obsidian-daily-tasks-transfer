@@ -1,0 +1,17 @@
+---
+tags:
+  - Daily
+---
+added tag
+
+# Tasks
+
+## [[Allgemeine Tasks|Allgemein]]
+- [ ] Vitamin D
+- [x] Zähne putzen ✅ 2024-08-04
+- [ ] Duschen
+- [x] Ikea boxen für Kleidung bestellen ✅ 2024-08-04
+- [ ] Gaming Stuhl bestellen
+
+
+## [[S2 SE1|SE1]]

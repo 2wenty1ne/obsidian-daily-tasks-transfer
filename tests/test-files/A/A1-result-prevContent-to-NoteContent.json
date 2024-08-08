@@ -1,0 +1,15 @@
+{
+    "properties": "'---\r\ntags:\r\n  - Daily\r\n---\r\n'",
+    "headers": {
+        "topText": [ "'added tag\r\n', '\r\n'" ],
+        "Tasks": [ "'\r\n'" ],
+        "'# [[Allgemeine Tasks|Allgemein]]'": [
+            "'- [ ] Vitamin D\r\n'",
+            "'- [ ] Duschen\r\n'",
+            "'- [ ] Gaming Stuhl bestellen\r\n'",
+            "'\r\n'",
+            "'\r\n'"
+        ],
+        "'# [[S2 SE1|SE1]]'": []
+    }
+}

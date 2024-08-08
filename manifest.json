@@ -1,11 +1,11 @@
 {
 	"id": "obsidian-daily-tasks-transfer",
 	"name": "Daily Transfer Plugin",
-	"version": "1.0.0",
+	"version": "0.1.1",
 	"minAppVersion": "0.15.0",
 	"description": "Plugin to transfer uncompleted tasks to new daily task.",
 	"author": "2wenty1ne",
 	"authorUrl": "https://github.com/2wenty1ne",
 	"fundingUrl": "https://github.com/2wenty1ne",
-	"isDesktopOnly": false
+	"isDesktopOnly": true
 }

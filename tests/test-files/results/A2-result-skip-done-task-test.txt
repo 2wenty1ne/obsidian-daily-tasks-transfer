@@ -1,0 +1,14 @@
+---
+tags:
+  - Daily
+---
+added tag
+
+# Tasks
+
+## [[Allgemeine Tasks|Allgemein]]
+- [ ] Vitamin D
+- [ ] Gaming Stuhl bestellen
+
+
+## [[S2 SE1|SE1]]

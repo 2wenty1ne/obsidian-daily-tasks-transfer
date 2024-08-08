@@ -1,7 +1,8 @@
 import { Notice, TAbstractFile, TFile, Vault } from "obsidian";
-import { getDailyFiles, getTodaysDailyFile, getPreviousDailyFile, createTodaysDailyNote, extractTasksFromPreviousDaily, checkTodaysNote, addPreviousContentToDaily } from "./manageDailyFiles";
+import { getDailyFiles, getTodaysDailyFile, getPreviousDailyFile, createTodaysDailyNote, checkTodaysNote, addPreviousContentToDaily } from "./manageDailyFiles";
 import { NoteContent, readNote } from "./dailyTransferUtils";
 import { dailyFolderPath, dailyTemplateFilePath } from "./dailyGlobalFilePathStorage";
+import { extractTasksFromPreviousDaily } from "./dailyStringToNoteContent";
 
 
 export async function transferDailyContent(vault: Vault){
