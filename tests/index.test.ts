@@ -1,4 +1,4 @@
-import { readTestFile } from "./testFileInteraction";
+import { readTestFile, writeTestFile } from "./testFileInteraction";
 import { NoteContent } from "../src/Daily/dailyTransferUtils";
 
 import { extractTasksFromPreviousDaily } from "../src/Daily/dailyStringToNoteContent";
@@ -15,6 +15,16 @@ describe('A - Previous Content to NoteContent Interface Conversion', () => {
 
         const [testedFunctionResult, resultFileContent] = testFunctionWrapper<string, NoteContent>(extractTasksFromPreviousDaily, 
             testFileName, resultFileName, errorMessage);
+
+        //! TEST
+
+        // let testNote: NoteContent = {properties: 'props', headers: {'cmogus: ':['amogus', 'bmougs']}}
+
+        console.log("testedFunctionResult")
+        writeTestFile(testedFunctionResult, 0)
+        console.log("resultFileContent")
+        writeTestFile(resultFileContent, 1)
+        //! TEST
 
         expect(testedFunctionResult).toBe(resultFileContent);
     })

@@ -3,6 +3,7 @@ import { getDailyFiles, getTodaysDailyFile, getPreviousDailyFile, createTodaysDa
 import { NoteContent, readNote } from "./dailyTransferUtils";
 import { dailyFolderPath, dailyTemplateFilePath } from "./dailyGlobalFilePathStorage";
 import { extractTasksFromPreviousDaily } from "./dailyStringToNoteContent";
+import { writeTestFile } from "tests/testFileInteraction";
 
 
 export async function transferDailyContent(vault: Vault){

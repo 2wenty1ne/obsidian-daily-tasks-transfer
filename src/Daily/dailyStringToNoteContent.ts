@@ -5,6 +5,7 @@ export function extractTasksFromPreviousDaily(previousDailyContent: string): Not
 
     const lines = previousDailyContent.split('\n');
     
+    let type = 'NoteContent'
     let properties = '';
     let inProperties = false;
     let gotProperties = false;
@@ -51,5 +52,5 @@ export function extractTasksFromPreviousDaily(previousDailyContent: string): Not
         }
     }                             
 
-    return {properties, headers} as NoteContent;
+    return {type, properties, headers} as NoteContent;
 }
