@@ -1,20 +1,20 @@
 {
   "type": "NoteContent",
-  "properties": "---\r\ntags:\r\n  - Daily\r\n---\r\n",
+  "properties": "---\ntags:\n  - Daily\n---\n",
   "headers": {
     "topText": [
-      "added tag\r\n",
-      "\r\n"
+      "added tag\n",
+      "\n"
     ],
     "Tasks": [
-      "\r\n"
+      "\n"
     ],
     "# [[Allgemeine Tasks|Allgemein]]": [
-      "- [ ] Vitamin D\r\n",
-      "- [ ] Duschen\r\n",
-      "- [ ] Gaming Stuhl bestellen\r\n",
-      "\r\n",
-      "\r\n"
+      "- [ ] Vitamin D\n",
+      "- [ ] Duschen\n",
+      "- [ ] Gaming Stuhl bestellen\n",
+      "\n",
+      "\n"
     ],
     "# [[S2 SE1|SE1]]": []
   }

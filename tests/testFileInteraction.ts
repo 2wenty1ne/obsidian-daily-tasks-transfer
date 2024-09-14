@@ -1,11 +1,24 @@
 import * as fs from 'fs';
+import dotenv from "dotenv";
 import path, { join } from 'path';
-import { NoteContent} from "src/Daily/dailyTransferUtils";
 
+
+export function getTestFolderPath(): string {
+    dotenv.config()
+    const testFilePath: string | undefined = process.env.TEST_FILES_PATH;
+
+    console.log(`Path: ${testFilePath}`)
+
+    if (!(testFilePath)) {
+        throw new Error('Failed to get test file paths from .env in getTestFilePath for the test function wrapper.');
+    }
+
+    return testFilePath;
+}
 
 export function readTestFile<T = string>(fileDirectory: string, fileName: string): T {
     let fileType: undefined | string = fileName.split('.').pop()
-    console.log("FileName: ", fileName, "\nFile Type: ", fileType)
+
     if (!(fileType)){
         fileType = "txt"
     }
@@ -22,21 +35,21 @@ export function readTestFile<T = string>(fileDirectory: string, fileName: string
 }
 
 
-export function writeTestFile(contentToWrite: any, counter: number) {
+export function writeTestFile(filepath: string, contentToWrite: any, counter: number) {
+    console.log(`Path in writeTestFile: ${filepath}`)
     let fileType: string;
     let fileContent: string = contentToWrite;
 
     if ('type' in contentToWrite && contentToWrite.type == 'NoteContent') {
         fileType = ".json";
-        fileContent = JSON.stringify(contentToWrite, null, 2);
+        fileContent = JSON.stringify(contentToWrite, null, 4);
     }
     else {
-        fileType = ".string";
+        fileType = ".txt";
     }
 
     const fileName: string = `${counter}-createdNote${fileType}`;
-    const savePath: string = path.join(__dirname, "creationDestination", fileName);
+    const savePath: string = path.join(filepath, fileName);
 
-    console.log(counter, " - Content: ", fileContent)
     fs.writeFileSync(savePath, fileContent, 'utf8');
 }

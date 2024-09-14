@@ -1,6 +1,8 @@
 import { App, Notice, TFile } from "obsidian";
+import path from "path";
 import { extractTasksFromPreviousDaily } from "src/Daily/dailyStringToNoteContent";
 import { NoteContent, readNote } from "src/Daily/dailyTransferUtils";
+import { getTestFolderPath, writeTestFile } from "tests/testFileInteraction";
 
 export async function getNoteContent(app: App) {
     const activeFile: TFile | null = app.workspace.getActiveFile();
@@ -23,4 +25,7 @@ export async function getNoteContent(app: App) {
     const activeFileTasks: NoteContent = extractTasksFromPreviousDaily(activeFileContent);
 
     console.log(`Current NoteContent: ${activeFileTasks.headers}`)
+    //TODO Very bad, fix after vacation...
+    let testFolderPath: string = '/home/vikkes/GitObsidian/ObsidianRepo/Obsidian/.obsidian/plugins/obsidian-daily-tasks-transfer/tests/creationDestination'
+    writeTestFile(testFolderPath, activeFileTasks, 3)
 }

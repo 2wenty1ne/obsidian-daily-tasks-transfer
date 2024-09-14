@@ -1,5 +1,5 @@
-import dotenv from "dotenv";
-import { readTestFile } from "./testFileInteraction";
+import path from "path";
+import { getTestFolderPath, readTestFile } from "./testFileInteraction";
 
 
 type functionToTest<TestContentType, CompareType> = (testFileName: TestContentType) => CompareType;
@@ -13,7 +13,7 @@ export function testFunctionWrapper<TestContentType, CompareType>(
     ): [CompareType, CompareType]{
 
 
-    const testFilePath: string = getTestFilePath();
+    const testFilePath: string = path.join(getTestFolderPath(), "test-files");
 
     
     //? Get the content of the test file
@@ -35,17 +35,4 @@ export function testFunctionWrapper<TestContentType, CompareType>(
 
 
     return [testedFunctionResult, resultFileContent] as [CompareType, CompareType]
-}
-
-
-
-function getTestFilePath(): string {
-    dotenv.config()
-    const testFilePath: string | undefined = process.env.TEST_FILES_PATH;
-
-    if (!(testFilePath)) {
-        throw new Error('Failed to get test file paths from .env in getTestFilePath for the test function wrapper.');
-    }
-
-    return testFilePath;
 }

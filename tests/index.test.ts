@@ -1,38 +1,61 @@
-import { readTestFile, writeTestFile } from "./testFileInteraction";
 import { NoteContent } from "../src/Daily/dailyTransferUtils";
 
 import { extractTasksFromPreviousDaily } from "../src/Daily/dailyStringToNoteContent";
 import { testFunctionWrapper } from "./testFunctionWrapper";
 
 
-
 describe('A - Previous Content to NoteContent Interface Conversion', () => {
     const errorMessage = 'Error reading file content in string to NoteContent conversion test reading the text test file';
 
-    test('A1 - First test', () => {
+    test('A1 - Overall test', () => {
         const testFileName = 'A/A1-prevContent-to-NoteContent.txt'
         const resultFileName = 'A/A1-result-prevContent-to-NoteContent.json';
 
         const [testedFunctionResult, resultFileContent] = testFunctionWrapper<string, NoteContent>(extractTasksFromPreviousDaily, 
             testFileName, resultFileName, errorMessage);
 
-        //! TEST
-
-        // let testNote: NoteContent = {properties: 'props', headers: {'cmogus: ':['amogus', 'bmougs']}}
-
-        console.log("testedFunctionResult")
-        writeTestFile(testedFunctionResult, 0)
-        console.log("resultFileContent")
-        writeTestFile(resultFileContent, 1)
-        //! TEST
-
-        expect(testedFunctionResult).toBe(resultFileContent);
+        expect(testedFunctionResult).toStrictEqual(resultFileContent);
     })
-    test('A1 TEST', () => {
-        expect(4 + 5).toBe(9)
+
+    test('A2 - No done tasks', () => {
+        const testFileName = 'A/A2-prevContent-to-NoteContent.txt'
+        const resultFileName = 'A/A2-result-prevContent-to-NoteContent.json';
+
+        const [testedFunctionResult, resultFileContent] = testFunctionWrapper<string, NoteContent>(extractTasksFromPreviousDaily, 
+            testFileName, resultFileName, errorMessage);
+
+        expect(testedFunctionResult).toStrictEqual(resultFileContent);
+    })
+
+    test('A3 - Random done tasks', () => {
+        const testFileName = 'A/A3-prevContent-to-NoteContent.txt'
+        const resultFileName = 'A/A3-result-prevContent-to-NoteContent.json';
+
+        const [testedFunctionResult, resultFileContent] = testFunctionWrapper<string, NoteContent>(extractTasksFromPreviousDaily, 
+            testFileName, resultFileName, errorMessage);
+        
+        expect(testedFunctionResult).toStrictEqual(resultFileContent);
+    })
+
+    test('A4 - No done tasks', () => {
+        const testFileName = 'A/A4-prevContent-to-NoteContent.txt'
+        const resultFileName = 'A/A4-result-prevContent-to-NoteContent.json';
+
+        const [testedFunctionResult, resultFileContent] = testFunctionWrapper<string, NoteContent>(extractTasksFromPreviousDaily, 
+            testFileName, resultFileName, errorMessage);
+        
+        expect(testedFunctionResult).toStrictEqual(resultFileContent);
     })
 })
 
+
+describe('B - Note-Content Interface from previous Note to new Note Content string Conversion', () => {
+    const errorMessage = 'Error reading file content in NoteContent to string conversion test reading the text test file';
+
+    test('Test', () => {
+        expect(4+9).toBe(13)
+    })
+})
 // describe('Testing string to NoteContent conversion', () => {
 //     test('First test', () => {
 //         //? extractTasksFromPreviousDaily  testFileContent -> NoteContent

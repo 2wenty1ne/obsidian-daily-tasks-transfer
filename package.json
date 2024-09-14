@@ -1,7 +1,7 @@
 {
-  "name": "obsidian-sample-plugin",
-  "version": "1.0.0",
-  "description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+  "name": "obsidian-daily-tasks-transfer",
+  "version": "0.1.1",
+  "description": "Plugin to transfer uncompleted tasks to new daily task.",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",
